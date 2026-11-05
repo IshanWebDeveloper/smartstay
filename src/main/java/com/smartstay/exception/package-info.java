@@ -1,5 +1,4 @@
 /**
- * Typed exceptions (ValidationException, BookingException, NotFoundException) that
- * the services throw and the console UI turns into readable messages.
+ * Unchecked exceptions with messages the console can show to users.
  */
 package com.smartstay.exception;
