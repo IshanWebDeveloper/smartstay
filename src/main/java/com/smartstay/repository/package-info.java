@@ -1,7 +1,4 @@
 /**
- * Data access: the generic Repository interface and in-memory implementations
- * backed by HashMap, TreeMap and ArrayList.
- *
- * <p>Hand-written rather than framework-generated so the data structures are visible.</p>
+ * Data access: the generic repository interface and its in-memory implementations.
  */
 package com.smartstay.repository;
