@@ -97,6 +97,19 @@ public class BookingRules {
     }
 
     /**
+     * Tells whether a room can be booked for a stay.
+     *
+     * @param room             the room
+     * @param stay             the requested stay
+     * @param roomReservations the existing reservations for that room
+     * @return {@code true} if it is in service and not reserved for those dates
+     */
+    public boolean isRoomBookable(Room room, DateRange stay, Collection<Reservation> roomReservations) {
+        return !room.isUnderMaintenance()
+                && roomReservations.stream().noneMatch(reservation -> reservation.blocksRoomDuring(stay));
+    }
+
+    /**
      * Checks a reservation can still be cancelled.
      *
      * @param reservation the reservation

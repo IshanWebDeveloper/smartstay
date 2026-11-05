@@ -117,10 +117,20 @@ public final class InMemoryReservationRepository implements Repository<Reservati
     }
 
     private void addToIndexes(Reservation reservation) {
-        reservationsByCheckIn.computeIfAbsent(reservation.getStay().checkIn(), date -> new ArrayList<>())
-                .add(reservation);
-        reservationsByRoom.computeIfAbsent(reservation.getRoom().getRoomId(), roomId -> new ArrayList<>())
-                .add(reservation);
+        insertInIdOrder(reservationsByCheckIn.computeIfAbsent(
+                reservation.getStay().checkIn(), date -> new ArrayList<>()), reservation);
+        insertInIdOrder(reservationsByRoom.computeIfAbsent(
+                reservation.getRoom().getRoomId(), roomId -> new ArrayList<>()), reservation);
+    }
+
+    // New bookings go straight on the end; a replaced one returns to its old position.
+    private static void insertInIdOrder(List<Reservation> bucket, Reservation reservation) {
+        int position = bucket.size();
+        while (position > 0 && BOOKING_ID_ORDER.compare(
+                bucket.get(position - 1).getBookingId(), reservation.getBookingId()) > 0) {
+            position--;
+        }
+        bucket.add(position, reservation);
     }
 
     private void removeFromIndexes(Reservation reservation) {

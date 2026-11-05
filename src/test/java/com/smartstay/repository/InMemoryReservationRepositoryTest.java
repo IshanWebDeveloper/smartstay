@@ -128,6 +128,17 @@ class InMemoryReservationRepositoryTest {
     }
 
     @Test
+    @DisplayName("Replacing a reservation keeps the lookups in booking-ID order")
+    void replaceKeepsOrder() {
+        repository.save(booking("SS-0001", R201, DAY_10));
+        repository.save(booking("SS-0002", R201, DAY_10));
+        repository.save(booking("SS-0001", R201, DAY_10));
+
+        assertEquals(List.of("SS-0001", "SS-0002"), ids(repository.findByCheckInDate(DAY_10)));
+        assertEquals(List.of("SS-0001", "SS-0002"), ids(repository.findByRoomId("R201")));
+    }
+
+    @Test
     @DisplayName("Deleting removes it from every lookup")
     void deleteRemovesEverywhere() {
         repository.save(booking("SS-0001", R201, DAY_10));
