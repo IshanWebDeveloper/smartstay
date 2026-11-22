@@ -16,6 +16,18 @@ mvn test                   # tests only
 java -jar target/smartstay.jar
 ```
 
+The admin menu's demo password is `admin123`.
+
+## Manual testing at a chosen time
+
+Some rules depend on the date and time. To fix the clock for a run, pass a date and time:
+
+```bash
+java -Dsmartstay.now=2026-11-06T15:00 -jar target/smartstay.jar
+```
+
+Seed reservations are dated relative to this time. Without the setting, the app uses the real time.
+
 ## Project structure
 
 ```

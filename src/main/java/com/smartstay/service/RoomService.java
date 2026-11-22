@@ -52,13 +52,24 @@ public class RoomService {
      * @throws ValidationException if the ID is malformed or already used
      */
     public Room addRoom(String roomId, RoomType type, BedType bedType) {
+        Room room = new Room(checkNewRoomId(roomId), type, bedType, RoomStatus.AVAILABLE);
+        rooms.save(room);
+        return room;
+    }
+
+    /**
+     * Checks an ID can be used for a new room.
+     *
+     * @param roomId the proposed room ID
+     * @return the ID in upper case
+     * @throws ValidationException if the ID is malformed or already used
+     */
+    public String checkNewRoomId(String roomId) {
         String id = normaliseId(roomId);
         if (rooms.existsById(id)) {
             throw new ValidationException("Room " + id + " already exists.");
         }
-        Room room = new Room(id, type, bedType, RoomStatus.AVAILABLE);
-        rooms.save(room);
-        return room;
+        return id;
     }
 
     /**
@@ -91,12 +102,24 @@ public class RoomService {
      * @throws BookingException  if the room has a current or future booking
      */
     public void removeRoom(String roomId) {
+        rooms.deleteById(checkRemovable(roomId).getRoomId());
+    }
+
+    /**
+     * Checks a room can be removed.
+     *
+     * @param roomId the room ID
+     * @return the room
+     * @throws NotFoundException if the room does not exist
+     * @throws BookingException  if the room has a current or future booking
+     */
+    public Room checkRemovable(String roomId) {
         Room room = findRoom(roomId);
         if (hasCurrentOrFutureBooking(room)) {
             throw new BookingException("Room " + room.getRoomId()
                     + " cannot be removed while it has a current or future booking.");
         }
-        rooms.deleteById(room.getRoomId());
+        return room;
     }
 
     /**

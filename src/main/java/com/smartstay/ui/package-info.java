@@ -1,6 +1,4 @@
 /**
- * Console user interface: menus, safe input reading and tabular output.
- *
- * <p>The only package that reads from System.in or writes to System.out.</p>
+ * Console user interface. The only package that uses System.in and System.out.
  */
 package com.smartstay.ui;

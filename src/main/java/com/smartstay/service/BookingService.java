@@ -66,6 +66,16 @@ public class BookingService {
     }
 
     /**
+     * Checks a stay starts far enough ahead to be booked.
+     *
+     * @param stay the requested stay
+     * @throws BookingException if check-in is too soon
+     */
+    public void checkLeadTime(DateRange stay) {
+        rules.checkLeadTime(stay);
+    }
+
+    /**
      * Makes a reservation and records the booking advance.
      *
      * @param nicOrPassport  the registered guest's number
@@ -144,6 +154,20 @@ public class BookingService {
     }
 
     /**
+     * Checks a reservation can be cancelled.
+     *
+     * @param bookingId the booking ID
+     * @return the reservation
+     * @throws NotFoundException if the reservation does not exist
+     * @throws BookingException  if it is already cancelled or too close to check-in
+     */
+    public Reservation checkCancellable(String bookingId) {
+        Reservation reservation = findByBookingId(bookingId);
+        rules.checkCancellable(reservation);
+        return reservation;
+    }
+
+    /**
      * Cancels a reservation. The advance becomes refundable.
      *
      * @param bookingId the booking ID
@@ -152,8 +176,7 @@ public class BookingService {
      * @throws BookingException  if it is already cancelled or too close to check-in
      */
     public Reservation cancelReservation(String bookingId) {
-        Reservation reservation = findByBookingId(bookingId);
-        rules.checkCancellable(reservation);
+        Reservation reservation = checkCancellable(bookingId);
         reservation.cancel();
         reservations.save(reservation);
         return reservation;
