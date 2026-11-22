@@ -1,5 +1,4 @@
 /**
- * Application services (RoomService, GuestService, BookingService, InvoiceService)
- * that coordinate repositories, business rules and billing for each use case in the brief.
+ * Application services for rooms, guests, bookings and invoices.
  */
 package com.smartstay.service;

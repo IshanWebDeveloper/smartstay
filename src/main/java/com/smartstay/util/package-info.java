@@ -1,4 +1,4 @@
 /**
- * Small shared helpers, such as booking ID generation and money/date formatting.
+ * Small helpers: booking IDs and money and date formatting.
  */
 package com.smartstay.util;

@@ -1,5 +1,6 @@
 package com.smartstay.model;
 
+import com.smartstay.exception.ValidationException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -15,13 +16,13 @@ public record DateRange(LocalDate checkIn, LocalDate checkOut) {
     /**
      * Validates the range.
      *
-     * @throws IllegalArgumentException if check-out is not after check-in
+     * @throws ValidationException if check-out is not after check-in
      */
     public DateRange {
         Objects.requireNonNull(checkIn, "Check-in date is required.");
         Objects.requireNonNull(checkOut, "Check-out date is required.");
         if (!checkOut.isAfter(checkIn)) {
-            throw new IllegalArgumentException("Check-out date must be after the check-in date.");
+            throw new ValidationException("Check-out date must be after the check-in date.");
         }
     }
 

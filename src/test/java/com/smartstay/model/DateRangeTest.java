@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.smartstay.exception.ValidationException;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,15 +66,15 @@ class DateRangeTest {
     @Test
     @DisplayName("Check-out equal to check-in is rejected")
     void sameDayRangeRejected() {
-        IllegalArgumentException error =
-                assertThrows(IllegalArgumentException.class, () -> range(DAY_10, DAY_10));
+        ValidationException error =
+                assertThrows(ValidationException.class, () -> range(DAY_10, DAY_10));
         assertEquals("Check-out date must be after the check-in date.", error.getMessage());
     }
 
     @Test
     @DisplayName("Check-out before check-in is rejected")
     void reversedRangeRejected() {
-        assertThrows(IllegalArgumentException.class, () -> range(DAY_12, DAY_10));
+        assertThrows(ValidationException.class, () -> range(DAY_12, DAY_10));
     }
 
     @Test
