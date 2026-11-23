@@ -313,10 +313,10 @@ class SmartStayAppTest {
     @Test
     @DisplayName("Rooms under maintenance, overlapping stays and too many guests are rejected")
     void bookingRulesRejected() {
-        assertTrue(run(asGuest("3", "199012345678", "1", day(5), day(6), "R103", "1", "Y"))
-                .contains("Room R103 is under maintenance."));
-        assertTrue(run(asGuest("3", "199012345678", "3", day(11), day(12), "R301", "2", "Y"))
-                .contains("Room R301 is already reserved"));
+        assertTrue(run(asGuest("3", "199012345678", "1", day(5), day(6), "R103", BACK))
+                .contains("Room R103 is not available from"));
+        assertTrue(run(asGuest("3", "199012345678", "3", day(11), day(12), "R301", BACK))
+                .contains("Room R301 is not available from"));
         assertTrue(run(asGuest("3", "199012345678", "2", day(5), day(6), "R201", "5", "Y"))
                 .contains("holds at most 4 guests"));
     }

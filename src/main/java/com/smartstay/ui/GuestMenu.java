@@ -111,7 +111,7 @@ public final class GuestMenu extends Menu {
             return;
         }
         printer.printRooms(rooms);
-        Room room = input.read("Room ID", text -> findRoomOfType(text, type));
+        Room room = input.read("Room ID", text -> findListedRoom(text, type, stay, rooms));
         int numberOfGuests = input.readPositiveNumber("Number of guests");
 
         printer.printMessage(guest.getFullName() + ", room " + room.getRoomId() + ", " + stay + ", "
@@ -128,10 +128,15 @@ public final class GuestMenu extends Menu {
         printer.printReservations(List.of(reservation));
     }
 
-    private Room findRoomOfType(String roomId, RoomType type) {
+    private Room findListedRoom(String roomId, RoomType type, DateRange stay, List<Room> availableRooms) {
         Room room = roomService.findRoom(roomId);
         if (room.getType() != type) {
             throw new ValidationException("Room " + room.getRoomId() + " is not a " + type + " room.");
+        }
+        // Reject rooms left out of the list so a clash is caught here, not after confirmation.
+        if (!availableRooms.contains(room)) {
+            throw new ValidationException("Room " + room.getRoomId() + " is not available from " + stay
+                    + ". Choose a room from the list.");
         }
         return room;
     }
